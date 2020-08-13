@@ -9,7 +9,7 @@ from h2o.estimators.glm import H2OGeneralizedLinearEstimator as glm
 # the same models.
 def glm_alpha_array_with_lambda_search_cv():
     # read in the dataset and construct training set (and validation set)
-    print("Testing glm cross-validation with alpha array, lambda_search for multiomial models.")
+    print("Testing glm cross-validation with alpha array, lambda_search for multinomial models.")
     h2o_data = h2o.import_file(pyunit_utils.locate("smalldata/glm_test/multinomial_10_classes_10_cols_10000_Rows_train.csv"))
     enum_columns = ["C1", "C2", "C3", "C4", "C5"]
     for cname in enum_columns:
@@ -31,7 +31,15 @@ def glm_alpha_array_with_lambda_search_cv():
 
     for l in range(0,len(cv_r['lambdas'])):
         print("comparing coefficients for submodel {0}".format(l))
+        print("coeffs without valid")
+        print(cv_r['coefficients'][l])
+        print("coefficients with valid")
+        print(cv_r_valid['coefficients'][l])
         pyunit_utils.assertEqualCoeffDicts(cv_r['coefficients'][l], cv_r_valid['coefficients'][l], tol=1e-6)
+        print("std_coeffs without valid")
+        print(cv_r['coefficients_std'][l])
+        print("std_coefficients with valid")
+        print(cv_r_valid['coefficients_std'][l])
         pyunit_utils.assertEqualCoeffDicts(cv_r['coefficients_std'][l], cv_r_valid['coefficients_std'][l], tol=1e-6)
 
 
